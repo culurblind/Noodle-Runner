@@ -1,86 +1,90 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float acceleration;
-    public Rigidbody2D body;
-    public float groundSpeed;
-    public float jumpSpeed;
 
-    [Range(0f, 1f)]
-    public float groundDecay;
-    public bool grounded;
+    public Rigidbody2D body;
     public BoxCollider2D groundCheck;
     public LayerMask groundMask;
-    public float speedMultiplier;
+
+    public float acceleration;
+    public float groundSpeed;
+    public float jumpSpeed;
+    [Range(0f, 0.9f)]
+    public float groundDecay;
+    public bool grounded;
 
     float xInput;
     float yInput;
 
-    private bool isSpeedBoosted = false;
-
-    // Start is called before the first frame update
     void Start() {
-        
+
+
     }
+    
 
-    // Update is called once per frame
-    void Update() {
-        getInput();
-        handleJump();
-    }
+    void Update(){
 
-    void FixedUpdate() {
-        CheckGround();
-        friction();
-        moveWithInput();
-    }
 
-    void getInput() {
-        xInput = Input.GetAxis("Horizontal");
-        yInput = Input.GetAxis("Vertical");
-    }
+        float xInput = Input.GetAxis("Horizontal");
+        float yInput = Input.GetAxis("Vertical");
 
-    void moveWithInput() {
-        if (Mathf.Abs(xInput) > 0){
+        if (Math.Abs(xInput) > 0) {
 
-            float increment = xInput * acceleration;
-            float maxSpeed = isSpeedBoosted ? groundSpeed * 2 : groundSpeed;
-            float newSpeed = Mathf.Clamp(body.velocity.x + increment, -maxSpeed, maxSpeed);
-            body.velocity = new Vector2(newSpeed, body.velocity.y);
+            //float increment = xInput * acceleration;
+            //float newSpeed = Mathf.Clamp(body.velocity.x + increment, -groundSpeed, groundSpeed);
+            body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
 
             //float direction = Mathf.Sign(xInput);
             //transform.localScale = new Vector3(direction, 1, 1);
         }
-    }
 
-    void handleJump() {
         if (Input.GetButtonDown("Jump") && grounded) {
             body.velocity = new Vector2(body.velocity.x, jumpSpeed);
         }
+
     }
 
-    void CheckGround() {
-        grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
+    /*void getInput() {
+        float xInput = Input.GetAxis("Horizontal");
+        float yInput = Input.GetAxis("Vertical");
     }
 
-    void friction() {
+    void MoveWInput() { 
+        if (Math.Abs(xInput) > 0) {
+            body.velocity = new Vector2(xInput * speed, body.velocity.y);
+        }
+
+        if (Math.Abs(yInput) > 0) {
+            body.velocity = new Vector2(body.velocity.x, yInput * speed);
+        }
+    }*/
+
+    void FixedUpdate() {
+        CheckGround();
+
+        if (Math.Abs(xInput) > 0) {
+            body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
+        }
+
         if (grounded && xInput == 0 && yInput == 0) {
+            body.velocity *= groundDecay;
+        }
+
+        Friction();
+    }
+
+    void Friction() { 
+        if (grounded && xInput == 0 && body.velocity.y <= 0) {
             body.velocity *= groundDecay;
         }
     }
 
-    public void StartSpeedChanger(float multiplier, float duration)
-    {
-        StartCoroutine(SpeedChangerCoroutine(multiplier, duration));
-    }
-
-    private IEnumerator SpeedChangerCoroutine(float multiplier, float duration)
-    {
-        speedMultiplier = multiplier;
-        yield return new WaitForSeconds(duration);
-        speedMultiplier = 1f;
+     void CheckGround() {
+        grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
     }
 }

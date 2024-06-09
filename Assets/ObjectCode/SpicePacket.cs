@@ -12,7 +12,7 @@ public class SpicePacket : MonoBehaviour
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
-                playerMovement.StartSpeedChanger(speedMultiplier, duration);
+                //playerMovement.StartSpeedChanger(speedMultiplier, duration);
             }
         }
     }

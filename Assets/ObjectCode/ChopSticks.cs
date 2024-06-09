@@ -12,7 +12,7 @@ public class Chopsticks : MonoBehaviour
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
-                playerMovement.StartSpeedChanger(speedMultiplier, duration);
+                //playerMovement.StartSpeedChanger(speedMultiplier, duration);
                 Destroy(gameObject);
             }
         }
