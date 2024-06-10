@@ -9,6 +9,7 @@ public class EvanHeadCollision : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("Collision with player detected!");
             SceneManager.LoadScene("LoseScreen");
         }
     }

@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/StartScreen.unity
     guid: 337aac36b980342658e204639bb9ff21
   - enabled: 1
-    path: Assets/Level 1.unity
+    path: Assets/test level.unity
     guid: beb4db4c21acee0498aef5bdc910b850
   - enabled: 1
     path: Assets/Level 2.unity
