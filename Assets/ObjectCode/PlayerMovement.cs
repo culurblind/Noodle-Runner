@@ -71,11 +71,11 @@ public class PlayerMovement : MonoBehaviour
             body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
         }
 
-        if (grounded && xInput == 0 && yInput == 0) {
+        /*if (grounded && xInput == 0 && yInput == 0) {
             body.velocity *= groundDecay;
-        }
+        }*/
 
-        Friction();
+        //Friction();
     }
 
     void Friction() { 
@@ -88,3 +88,4 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
     }
 }
+
