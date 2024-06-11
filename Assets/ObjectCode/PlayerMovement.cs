@@ -17,12 +17,16 @@ public class PlayerMovement : MonoBehaviour
     [Range(0f, 0.9f)]
     public float groundDecay;
     public bool grounded;
+    private float originalGroundSpeed;
+    public float minGroundSpeed = 5f;
+    private bool isSpeedChanged = false;
 
     float xInput;
     float yInput;
 
     void Start() {
 
+        originalGroundSpeed = groundSpeed;
 
     }
     
@@ -67,7 +71,10 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate() {
         CheckGround();
 
-        if (Math.Abs(xInput) > 0) {
+        float xInput = Input.GetAxis("Horizontal");
+
+        if (Math.Abs(xInput) > 0) 
+        {
             body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
         }
 
@@ -86,6 +93,24 @@ public class PlayerMovement : MonoBehaviour
 
      void CheckGround() {
         grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
+    }
+
+     public void StartSpeedChanger(float multiplier, float duration)
+    {
+        if (!isSpeedChanged)
+        {
+            StartCoroutine(ChangeSpeedTemporarily(multiplier, duration));
+        }
+    }
+
+    private IEnumerator ChangeSpeedTemporarily(float multiplier, float duration)
+    {
+        isSpeedChanged = true;
+        float newSpeed = groundSpeed * multiplier;
+        groundSpeed = Mathf.Max(newSpeed, minGroundSpeed);  // Clamp the speed to the minimum value.
+        yield return new WaitForSeconds(duration);
+        groundSpeed = originalGroundSpeed;
+        isSpeedChanged = false;
     }
 }
 
