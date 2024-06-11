@@ -39,12 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Math.Abs(xInput) > 0) {
 
-            //float increment = xInput * acceleration;
-            //float newSpeed = Mathf.Clamp(body.velocity.x + increment, -groundSpeed, groundSpeed);
             body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
-
-            //float direction = Mathf.Sign(xInput);
-            //transform.localScale = new Vector3(direction, 1, 1);
         }
 
         if (Input.GetButtonDown("Jump") && grounded) {
@@ -52,21 +47,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-
-    /*void getInput() {
-        float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
-    }
-
-    void MoveWInput() { 
-        if (Math.Abs(xInput) > 0) {
-            body.velocity = new Vector2(xInput * speed, body.velocity.y);
-        }
-
-        if (Math.Abs(yInput) > 0) {
-            body.velocity = new Vector2(body.velocity.x, yInput * speed);
-        }
-    }*/
 
     void FixedUpdate() {
         CheckGround();
@@ -78,17 +58,6 @@ public class PlayerMovement : MonoBehaviour
             body.velocity = new Vector2(xInput * groundSpeed, body.velocity.y);
         }
 
-        /*if (grounded && xInput == 0 && yInput == 0) {
-            body.velocity *= groundDecay;
-        }*/
-
-        //Friction();
-    }
-
-    void Friction() { 
-        if (grounded && xInput == 0 && body.velocity.y <= 0) {
-            body.velocity *= groundDecay;
-        }
     }
 
      void CheckGround() {
@@ -111,6 +80,13 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(duration);
         groundSpeed = originalGroundSpeed;
         isSpeedChanged = false;
+    }
+
+
+    void Friction() { 
+        if (grounded && xInput == 0 && body.velocity.y <= 0) {
+            body.velocity *= groundDecay;
+        }
     }
 }
 
